@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Transport vs Recreation Spending Shift",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "data": {"values": [{"year":2019,"Food":9800,"Transport":11500,"Recreation":10500,"Health":7200,"Housing":18500,"Hotels":8200,"Furnishings":4200,"Clothing":3800,"Misc":5600,"Alcohol":3200},{"year":2020,"Food":10200,"Transport":9200,"Recreation":7800,"Health":7500,"Housing":19200,"Hotels":6500,"Furnishings":4800,"Clothing":3600,"Misc":5800,"Alcohol":3100},{"year":2021,"Food":10800,"Transport":10800,"Recreation":9500,"Health":8000,"Housing":19800,"Hotels":7800,"Furnishings":5100,"Clothing":3900,"Misc":6100,"Alcohol":3000},{"year":2022,"Food":11500,"Transport":12500,"Recreation":11200,"Health":8500,"Housing":21000,"Hotels":9200,"Furnishings":5300,"Clothing":4100,"Misc":6500,"Alcohol":2900},{"year":2023,"Food":11900,"Transport":13200,"Recreation":12100,"Health":8800,"Housing":22500,"Hotels":9800,"Furnishings":5400,"Clothing":4300,"Misc":6800,"Alcohol":2850},{"year":2024,"Food":12200,"Transport":13600,"Recreation":12800,"Health":9100,"Housing":24000,"Hotels":10300,"Furnishings":5450,"Clothing":4400,"Misc":7100,"Alcohol":2800},{"year":2025,"Food":12555,"Transport":14013,"Recreation":13436,"Health":9396,"Housing":25500,"Hotels":10834,"Furnishings":5495,"Clothing":4498,"Misc":7392,"Alcohol":2794},{"year":2026,"Food":12900,"Transport":14600,"Recreation":14100,"Health":9800,"Housing":26800,"Hotels":11300,"Furnishings":5700,"Clothing":4650,"Misc":7700,"Alcohol":2750}]},
+  "transform": [
+    {"fold": ["Transport", "Recreation"], "as": ["category", "amount"]}
+  ],
+  "mark": {"type": "area", "tooltip": {"content": "data"}, "opacity": 0.7, "line": {"strokeWidth": 2}},
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": "Year",
+      "axis": {"labelAngle": 0, "labelFontSize": 11}
+    },
+    "y": {
+      "field": "amount",
+      "type": "quantitative",
+      "title": "Spending (AUD Millions)",
+      "axis": {"tickCount": 6, "grid": true, "gridColor": "#e2e8f0", "gridOpacity": 0.3}
+    },
+    "color": {
+      "field": "category",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Transport", "Recreation"],
+        "range": ["#9b59b6", "#f39c12"]
+      },
+      "legend": {
+        "orient": "top",
+        "title": null,
+        "labelFontSize": 12
+      }
+    },
+    "tooltip": [
+      {"field": "year", "type": "ordinal", "title": "Year"},
+      {"field": "category", "type": "nominal", "title": "Category"},
+      {"field": "amount", "type": "quantitative", "title": "Amount (AUD Mn)", "format": ",.0f"}
+    ]
+  }
+}
