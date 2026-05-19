@@ -1,0 +1,16 @@
+household_type,category,amount
+Families,Housing,850
+Families,Food,420
+Families,Transport,520
+Families,Recreation,380
+Families,Health,290
+Singles,Housing,480
+Singles,Food,210
+Singles,Transport,280
+Singles,Recreation,240
+Singles,Health,150
+Retirees,Housing,520
+Retirees,Food,280
+Retirees,Transport,180
+Retirees,Recreation,320
+Retirees,Health,350

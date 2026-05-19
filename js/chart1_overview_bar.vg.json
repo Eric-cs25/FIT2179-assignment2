@@ -1,0 +1,80 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Average Weekly Household Spending by Category",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {              
+        "stroke": "transparent"     
+    }                 
+  },
+  "data": {"values": [
+  {"category":"Transport","amount":14013.2,"color_order":1},
+  {"category":"Recreation & Culture","amount":13436.5,"color_order":2},
+  {"category":"Food","amount":12555.4,"color_order":3},
+  {"category":"Hotels Cafes & Restaurants","amount":10834.2,"color_order":4},
+  {"category":"Health","amount":9395.7,"color_order":5},
+  {"category":"Miscellaneous Goods & Services","amount":7391.5,"color_order":6},
+  {"category":"Furnishings & Household Equipment","amount":5494.8,"color_order":7},
+  {"category":"Clothing & Footwear","amount":4497.7,"color_order":8},
+  {"category":"Alcoholic Beverages & Tobacco","amount":2794.1,"color_order":9}
+]},
+  "transform": [
+    {"calculate": "datum.amount / 1000", "as": "amount_billions"}
+  ],
+  "mark": {"type": "bar", "tooltip": {"content": "data"}},
+  "encoding": {
+    "x": {
+      "field": "amount_billions",
+      "type": "quantitative",
+      "title": "Amount (AUD Billions)",
+      "axis": {"tickCount": 5, "grid": false}
+    },
+    "y": {
+      "field": "category",
+      "type": "nominal",
+      "title": null,
+      "sort": "-x"
+    },
+    "color": {
+      "field": "category",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Transport",
+          "Recreation & Culture",
+          "Food",
+          "Hotels Cafes & Restaurants",
+          "Health",
+          "Miscellaneous Goods & Services",
+          "Furnishings & Household Equipment",
+          "Clothing & Footwear",
+          "Alcoholic Beverages & Tobacco"
+        ],
+        "range": [
+          "#9b59b6",
+          "#f39c12",
+          "#e67e22",
+          "#d35400",
+          "#2980b9",
+          "#34495e",
+          "#5d6d7e",
+          "#e91e63",
+          "#1abc9c"
+        ]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "category", "type": "nominal", "title": "Category"},
+      {"field": "amount_billions", "type": "quantitative", "title": "Amount (AUD Bn)", "format": ".1f"},
+      {"field": "amount", "type": "quantitative", "title": "Amount (AUD Mn)", "format": ",.1f"}  
+    ]
+  }
+}
+
