@@ -1,0 +1,65 @@
+﻿{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Housing Cost Burden Across Australian States",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "projection": {"type": "mercator", "scale": 480, "center": [134, -28], "translate": [250, 200]},
+  "layer": [
+    {
+      "data": {"sphere": true},
+      "mark": {"type": "geoshape", "fill": "#d6eaf8"}
+    },
+    {
+      "data": {"graticule": true},
+      "mark": {"type": "geoshape", "stroke": "#ffffff", "strokeWidth": 0.5}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/australian-states.json",
+        "format": {"type": "json", "property": "features"}
+      },
+      "transform": [
+        {
+          "lookup": "properties.STATE_NAME",
+          "from": {
+            "data": {"values": [{"state":"New South Wales","total_spending":25326.7,"discretionary":15626,"non_discretionary":9700.7,"housing_burden":35.9,"population_millions":8.2,"longitude":146.5,"latitude":-32.5},{"state":"Victoria","total_spending":20145.3,"discretionary":12456.2,"non_discretionary":7689.1,"housing_burden":34.2,"population_millions":6.7,"longitude":144.5,"latitude":-37},{"state":"Queensland","total_spending":16581.6,"discretionary":10374.3,"non_discretionary":6207.3,"housing_burden":32.8,"population_millions":5.4,"longitude":144,"latitude":-23},{"state":"Western Australia","total_spending":9134.5,"discretionary":5789.2,"non_discretionary":3345.3,"housing_burden":29.5,"population_millions":2.9,"longitude":121,"latitude":-26},{"state":"South Australia","total_spending":6543.2,"discretionary":4123.8,"non_discretionary":2419.4,"housing_burden":31.1,"population_millions":1.8,"longitude":135.5,"latitude":-30},{"state":"Tasmania","total_spending":2345.6,"discretionary":1489.3,"non_discretionary":856.3,"housing_burden":28.7,"population_millions":0.57,"longitude":146.5,"latitude":-42},{"state":"Australian Capital Territory","total_spending":1462.5,"discretionary":911.5,"non_discretionary":551,"housing_burden":30.4,"population_millions":0.46,"longitude":149,"latitude":-35.5},{"state":"Northern Territory","total_spending":852.4,"discretionary":607.7,"non_discretionary":244.7,"housing_burden":27.3,"population_millions":0.25,"longitude":134,"latitude":-20}]},
+            "key": "state",
+            "fields": ["housing_burden", "total_spending", "population_millions"]
+          }
+        }
+      ],
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1.5},
+      "encoding": {
+        "color": {
+          "field": "housing_burden",
+          "type": "quantitative",
+          "title": "Housing Burden (%)",
+          "scale": {
+            "scheme": "blues",
+            "domain": [25, 40]
+          },
+          "legend": {
+            "orient": "right",
+            "titleFontSize": 11,
+            "labelFontSize": 10
+          }
+        },
+        "tooltip": [
+          {"field": "properties.STATE_NAME", "type": "nominal", "title": "State/Territory"},
+          {"field": "housing_burden", "type": "quantitative", "title": "Housing Burden (%)", "format": ".1f"},
+          {"field": "total_spending", "type": "quantitative", "title": "Total Spending (AUD Mn)", "format": ",.0f"},
+          {"field": "population_millions", "type": "quantitative", "title": "Population (Millions)", "format": ".2f"}
+        ]
+      }
+    }
+  ]
+}
+

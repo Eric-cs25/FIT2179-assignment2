@@ -1,0 +1,131 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Household Spending Profile Comparison",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "data": {"values": [
+    {"household":"Families","dimension":"Housing","value":850,"max":850,"normalized":1.0,"angle":0,"order":0},
+    {"household":"Families","dimension":"Food","value":420,"max":420,"normalized":1.0,"angle":60,"order":1},
+    {"household":"Families","dimension":"Transport","value":520,"max":520,"normalized":1.0,"angle":120,"order":2},
+    {"household":"Families","dimension":"Recreation","value":380,"max":380,"normalized":1.0,"angle":180,"order":3},
+    {"household":"Families","dimension":"Health","value":290,"max":350,"normalized":0.83,"angle":240,"order":4},
+    {"household":"Families","dimension":"Other","value":200,"max":200,"normalized":1.0,"angle":300,"order":5},
+    {"household":"Families","dimension":"Housing","value":850,"max":850,"normalized":1.0,"angle":0,"order":6},
+
+    {"household":"Singles","dimension":"Housing","value":480,"max":850,"normalized":0.56,"angle":0,"order":0},
+    {"household":"Singles","dimension":"Food","value":210,"max":420,"normalized":0.50,"angle":60,"order":1},
+    {"household":"Singles","dimension":"Transport","value":280,"max":520,"normalized":0.54,"angle":120,"order":2},
+    {"household":"Singles","dimension":"Recreation","value":240,"max":380,"normalized":0.63,"angle":180,"order":3},
+    {"household":"Singles","dimension":"Health","value":150,"max":350,"normalized":0.43,"angle":240,"order":4},
+    {"household":"Singles","dimension":"Other","value":120,"max":200,"normalized":0.60,"angle":300,"order":5},
+    {"household":"Singles","dimension":"Housing","value":480,"max":850,"normalized":0.56,"angle":0,"order":6},
+
+    {"household":"Retirees","dimension":"Housing","value":520,"max":850,"normalized":0.61,"angle":0,"order":0},
+    {"household":"Retirees","dimension":"Food","value":280,"max":420,"normalized":0.67,"angle":60,"order":1},
+    {"household":"Retirees","dimension":"Transport","value":180,"max":520,"normalized":0.35,"angle":120,"order":2},
+    {"household":"Retirees","dimension":"Recreation","value":320,"max":380,"normalized":0.84,"angle":180,"order":3},
+    {"household":"Retirees","dimension":"Health","value":350,"max":350,"normalized":1.0,"angle":240,"order":4},
+    {"household":"Retirees","dimension":"Other","value":150,"max":200,"normalized":0.75,"angle":300,"order":5},
+    {"household":"Retirees","dimension":"Housing","value":520,"max":850,"normalized":0.61,"angle":0,"order":6}
+  ]},
+  "transform": [
+    {"calculate": "300 + datum.normalized * 150 * cos(datum.angle * PI / 180)", "as": "x"},
+    {"calculate": "200 - datum.normalized * 150 * sin(datum.angle * PI / 180)", "as": "y"}
+  ],
+  "layer": [
+    {
+      "data": {"values": [
+        {"a":0,"x1":300,"y1":200,"x2":450,"y2":200},
+        {"a":60,"x1":300,"y1":200,"x2":375,"y2":70},
+        {"a":120,"x1":300,"y1":200,"x2":225,"y2":70},
+        {"a":180,"x1":300,"y1":200,"x2":150,"y2":200},
+        {"a":240,"x1":300,"y1":200,"x2":225,"y2":330},
+        {"a":300,"x1":300,"y1":200,"x2":375,"y2":330}
+      ]},
+      "mark": {"type": "rule", "stroke": "#e2e8f0", "strokeWidth": 1.5},
+      "encoding": {
+        "x": {"field": "x1", "type": "quantitative", "scale": null, "axis": null},
+        "y": {"field": "y1", "type": "quantitative", "scale": null, "axis": null},
+        "x2": {"field": "x2"},
+        "y2": {"field": "y2"}
+      }
+    },
+    {
+      "data": {"values": [
+        {"a":0,"x":300,"y":200,"r":37.5},
+        {"a":0,"x":300,"y":200,"r":75},
+        {"a":0,"x":300,"y":200,"r":112.5}
+      ]},
+      "mark": {"type": "arc", "fill": null, "stroke": "#e2e8f0", "strokeWidth": 1, "startAngle": 0, "endAngle": 360},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": null, "axis": null},
+        "y": {"field": "y", "type": "quantitative", "scale": null, "axis": null},
+        "radius": {"field": "r"}
+      }
+    },
+    {
+      "mark": {"type": "line", "strokeWidth": 3, "opacity": 0.8},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": null, "axis": null},
+        "y": {"field": "y", "type": "quantitative", "scale": null, "axis": null},
+        "color": {
+          "field": "household",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Families", "Singles", "Retirees"],
+            "range": ["#228B22", "#0000FF", "#A0522D"]
+          },
+          "legend": {"orient": "top", "title": null, "labelFontSize": 12}
+        },
+        "order": {"field": "order"}
+      }
+    },
+    {
+      "mark": {"type": "point", "size": 100, "opacity": 1},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": null, "axis": null},
+        "y": {"field": "y", "type": "quantitative", "scale": null, "axis": null},
+        "color": {
+          "field": "household",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Families", "Singles", "Retirees"],
+            "range": ["#1f4e79", "#e67e22", "#9b59b6"]
+          }
+        },
+        "tooltip": [
+          {"field": "household", "type": "nominal", "title": "Household Type"},
+          {"field": "dimension", "type": "nominal", "title": "Category"},
+          {"field": "value", "type": "quantitative", "title": "Weekly Spending (AUD)", "format": "$,.0f"},
+          {"field": "normalized", "type": "quantitative", "title": "Normalized Score", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "data": {"values": [
+        {"dimension":"Housing","lx":470,"ly":208,"align":"left","baseline":"top"},
+        {"dimension":"Food","lx":385,"ly":55,"align":"center","baseline":"bottom"},
+        {"dimension":"Transport","lx":215,"ly":55,"align":"center","baseline":"bottom"},
+        {"dimension":"Recreation","lx":120,"ly":208,"align":"right","baseline":"top"},
+        {"dimension":"Health","lx":215,"ly":345,"align":"center","baseline":"top"},
+        {"dimension":"Other","lx":385,"ly":345,"align":"center","baseline":"top"}
+      ]},
+      "mark": {"type": "text", "fontSize": 12, "fontWeight": 700, "color": "#4a5568"},
+      "encoding": {
+        "x": {"field": "lx", "type": "quantitative", "scale": null, "axis": null},
+        "y": {"field": "ly", "type": "quantitative", "scale": null, "axis": null},
+        "text": {"field": "dimension"},
+        "align": {"field": "align"},
+        "baseline": {"field": "baseline"}
+      }
+    }
+  ]
+}

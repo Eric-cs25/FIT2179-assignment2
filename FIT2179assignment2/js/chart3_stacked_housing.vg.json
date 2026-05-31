@@ -1,0 +1,48 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Housing vs All Other Spending Categories",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "data": {"values": [{"group":"Housing","amount":25500},{"group":"All Other Categories","amount":54755}]},
+  "mark": {"type": "bar", "tooltip": {"content": "data"}},
+  "encoding": {
+    "x": {
+      "field": "group",
+      "type": "nominal",
+      "title": null,
+      "axis": {"labelAngle": 0, "labelFontSize": 12}
+    },
+    "y": {
+      "field": "amount",
+      "type": "quantitative",
+      "title": "Amount (AUD Millions)",
+      "axis": {"tickCount": 5, "grid": true, "gridColor": "#e2e8f0", "gridOpacity": 0.3}
+    },
+    "color": {
+      "field": "group",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Housing", "All Other Categories"],
+        "range": ["#1f4e79", "#bdc3c7"]
+      },
+      "legend": {
+        "orient": "top",
+        "title": null,
+        "labelFontSize": 12
+      }
+    },
+    "tooltip": [
+      {"field": "group", "type": "nominal", "title": "Group"},
+      {"field": "amount", "type": "quantitative", "title": "Amount (AUD Mn)", "format": ",.0f"}
+    ]
+  }
+}
+

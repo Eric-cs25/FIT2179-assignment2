@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Do Australians Spend Their Money? | Data Visualisation</title>
+
+    <!-- Vega & Vega-Lite -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+    <!-- D3.js for Sankey diagram -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+
+    <!-- Pure.css Grid -->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
+    integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+</head>
+
+
+<body>
+  <div class="page">
+
+
+    <!-- ====== HERO / INTRODUCTION ====== -->
+    <div class="pure-g">
+      <div class="pure-u-1-1 hero">
+        <h1>Where Do Australians Spend Their Money?</h1>
+        <p>
+          Australians' spending patterns reveal how lifestyle, cost of living, and geography shape financial behaviour
+          across the country. This interactive story explores where household budgets go — from daily essentials to
+          discretionary pleasures — and how these patterns differ by income, location, and household type.
+        </p>
+        <p class="data-source-note">
+          Data sources: <a href="https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia" target="_blank">Australian Bureau of Statistics (ABS)</a>
+          &amp; <a href="https://www.ceicdata.com/en/australia/household-spending-by-industry/household-spending" target="_blank">CEIC Data</a>.
+          Figures in AUD millions unless otherwise stated.
+        </p>
+      </div>
+    </div>
+
+
+    <!-- ====== KEY METRICS ====== -->
+    <div class="pure-g metric-row">
+      <div class="metric-box">
+        <span class="metric-value">$80.3B</span>
+        <span class="metric-label">Total Monthly Household Spending</span>
+      </div>
+      <div class="metric-box" style="border-top-color: #e67e22;">
+        <span class="metric-value" style="color: #e67e22;">6.7%</span>
+        <span class="metric-label">Year-over-Year Growth</span>
+      </div>
+      <div class="metric-box" style="border-top-color: #1f4e79;">
+        <span class="metric-value" style="color: #1f4e79;">31.8%</span>
+        <span class="metric-label">Housing Share of Spending</span>
+      </div>
+      <div class="metric-box" style="border-top-color: #9b59b6;">
+        <span class="metric-value" style="color: #9b59b6;">$14.0B</span>
+        <span class="metric-label">Top Category: Transport</span>
+      </div>
+    </div>
+
+
+    <!-- ====== SECTION 1: OVERVIEW ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 1: What Choices Do Australians Make With Their Money</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>Beyond Survival: The Rise of Lifestyle Spending</h3>
+          <p>
+            Across Australia, the weekly budget is telling a new story - people's weekly expenditures are no longer 
+            solely for meeting basic survival needs. Nowadays, 
+            <span style="color: #9b59b6; font-weight: bold;">Transport</span> and 
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> have joined 
+            <span style="color: #e67e22; font-weight: bold;">Food</span> 
+            expenditure as the most important components of household expenses. And the spending on leisure and entertainment 
+            is almost equivalent to the expenditure on purchasing food.
+          </p>
+          <p>
+            This shift shows how modern life has changed. Household budgets are no longer built around survival alone; they 
+            are increasingly shaped by experiences, connection, movement, and the pursuit of balance between work and personal life.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this chart:</strong> Hover over each bar to see exact spending figures. Bars are sorted
+            from highest to lowest spending category.
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis1" class="vis-container"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis2" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>The Core of the Australian Budget</h3>
+          <p>
+            While household spending is spread across many categories, the <strong>"Big Three"</strong> — 
+            <span style="color: #9b59b6; font-weight: bold;">Transport</span>, 
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span>, 
+            and <span style="color: #e67e22; font-weight: bold;">Food</span> — command the lion's share of the budget. 
+            These categories account for nearly <strong>50% of all household spending</strong> in Australia.
+          </p>
+            This proportional dominance highlights a service-oriented economy where lifestyle priorities and mobility are 
+            just as financially significant as putting food on the table. It is not just about what we need to survive, but how we choose to move and play.
+          <p>
+            
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this chart:</strong> Each coloured segment represents a spending category's share of
+            the total. Hover to see the exact percentage and dollar amount. 
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>Transport and Recreation together make up over one-third of total spending, highlighting the importance
+            of mobility and lifestyle in Australian household budgets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== SECTION 2: HOUSING & ESSENTIALS ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 2: How Much Does Everyday Life Really Cost</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>Housing Dominates</h3>
+          <p>
+            <span style="color: #1f4e79; font-weight: bold;">Housing</span> stands as the most significant financial pressure on Australian households. 
+            When all related costs are combined — including rent, mortgage interest, utilities, and essential maintenance — it becomes a category 
+            of such scale that it must be viewed on its own.
+          </p>
+          <p>
+            This visualization highlights that reality clearly: <span style="color: #1f4e79; font-weight: bold;">Housing</span> alone is compared against the combined total of 
+            <span style="color: #bdc3c7; font-weight: bold;">All Other Spending Categories</span>, including <span style="color: #e67e22; font-weight: bold;">Food</span>, <span style="color: #9b59b6; font-weight: bold;">Transport</span>, 
+            <span style="color: #2980b9; font-weight: bold;">Health</span> and so on. <span style="color: #1f4e79; font-weight: bold;">Housing</span> accounts for <strong>almost half</strong> of <span style="color: #bdc3c7; font-weight: bold;">All Other Spending Categories</span>.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>User Guide:</strong> Notice how <span style="color: #1f4e79; font-weight: bold;">Housing</span> stands alone on the left bar, while <span style="color: #bdc3c7; font-weight: bold;">All Other Spending Categories</span>
+            are grouped on the right. This emphasises the scale of housing costs.
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis3" class="vis-container"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis4" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>Essential vs Non-Essential</h3>
+          <p>
+            Not all spending is discretionary. <span style="color: #6A040F; font-weight: bold;">Essential categories</span> — those households cannot easily cut back on —
+            include <span style="color: #e67e22; font-weight: bold;">Food</span>, <span style="color: #9b59b6; font-weight: bold;">Transport</span>, <span style="color: #2980b9; font-weight: bold;">Health</span>, 
+            and <span style="color: #1f4e79; font-weight: bold;">Housing</span>. Together, these essential categories represent a significant portion of total outgoings, 
+            leaving limited room for financial flexibility.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this chart:</strong> You can click on the legend to conduct classification and filtering. Or hover the mouse over the chart to unlock the precise values and 
+            highlight the dynamic correlations across groups.
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p><span style="color: #6A040F; font-weight: bold;">Essential</span> spending on <span style="color: #e67e22; font-weight: bold;">Food</span>, 
+            <span style="color: #1f4e79; font-weight: bold;">Housing</span>, 
+            and <span style="color: #9b59b6; font-weight: bold;">Transport</span> alone ($52.1B) <strong>exceeds</strong> all <span style="color: #E0C3FC; font-weight: bold;">Non-Essential</span> categories
+            combined, illustrating the rigidity of modern household budgets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== SECTION 3: INCOME DIFFERENCES ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 3: How Income Shapes Spending Choices</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>Spending Flow by Income</h3>
+          <p>
+            Australian households spend money very differently depending on their <strong>income level</strong> (left). 
+            While <span style="color: #1f4e79; font-weight: bold;">Housing</span> remains the dominant expense for everyone, its relative financial burden is significantly higher 
+            for lower-income groups, reflecting the intense cost-of-living pressures currently affecting many Australians.
+          </p>
+          <p>
+            This diagram visualises how expenditure flows from <strong>income groups</strong> (left) to <strong>spending categories</strong> (middle) 
+            and finally into <strong>essential and non-essential spending</strong> (right). The width of each band encodes 
+            proportional spending volume, allowing viewers to compare financial priorities across income levels. To maintain 
+            visual clarity, we have grouped the Entertainment, Clothing and Tourism items under the "Other" category.
+          </p>
+          <p>
+            To maintain visual clarity, we have grouped the Entertainment, Clothing and Tourism items under the "Other" category.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this chart:</strong> Follow the coloured bands from left to right.
+            The left column shows three income groups; the middle shows four spending categories;
+            the right separates spending into Essential vs Non-Essential.
+            Hover over any band to see exact flow values. Band colour indicates the spending category.
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis5" class="vis-container" style="min-height: 520px;"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis6" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>The Housing Burden</h3>
+          <p>
+            <span style="color: #1f4e79; font-weight: bold;">Housing</span> affordability is not distributed equally. <span style="color: #22333B; font-weight: bold;">Low Income</span> Australians face a housing burden 
+            <strong>more than twice</strong>as heavy as <span style="color: #A9B8C2; font-weight: bold;">High Income</span> earners. This disparity has profound implications for
+            financial stress, savings capacity, and quality of life.
+          </p>
+          <p>
+            The bar chart quantifies this inequality. While <span style="color: #A9B8C2; font-weight: bold;">High Income</span> households can allocate nearly 50% of their
+            budget to discretionary spending, <span style="color: #22333B; font-weight: bold;">Low Income</span> households must dedicate over 80% to essentials.
+          </p>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p><span style="color: #22333B; font-weight: bold;">Low Income</span> households spend 38.2% on Housing vs 18.3% for <span style="color: #A9B8C2; font-weight: bold;">High Income</span> — a gap of nearly 20 percentage
+            points that shapes financial inequality across Australia.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== SECTION 4: GEOGRAPHY ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 4: How Your Postcode Shapes Your Financial Reality</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>Housing Costs Are Not Shared Equally</h3>
+          <p>
+            Housing expenditure is <strong>heavily</strong> concentrated in <strong>major metropolitan regions</strong>, 
+            particularly along the <strong>east coast</strong> of Australia. Cities such as <strong>Sydney</strong> and <strong>Melbourne</strong> show significantly higher spending levels, reflecting 
+            the financial pressure created by <strong>population density</strong>, <strong>property demand</strong>, and <strong>rising living costs</strong>.
+          </p>
+          <p>
+            In contrast, <strong>regional and remote areas</strong> generally report <strong>lower</strong> housing expenditure, although this may also reflect differences in <strong>income levels</strong>, 
+            <strong>housing access</strong>, and <strong>economic opportunity</strong>.
+          </p>
+          <p>
+            Housing costs are not evenly distributed, but rather reflect significant regional differences in economic pressures across Australia.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this map:</strong> Darker blue = higher housing burden. Hover over each state to see
+            exact percentages, total spending, and population data. 
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>Where Australians live strongly shapes their financial reality, with urban households facing disproportionately higher housing burdens than 
+              those in regional areas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis7" class="vis-container"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis8" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>The Paradox of Prosperity</h3>
+          <p>
+            Wealth and pressure are not always distributed the way you expect across Australia. It is no surprise that the massive expenditures are 
+            concentrated in the bustling areas of New South Wales and Victoria. But these economic centers also bear the heaviest burden. 
+            Living in these big cities involves a kind of "double pressure": You are at the center of opportunities, but you also make the greatest
+            sacrifice in terms of housing stability.
+          </p>
+          <p>
+            Interestingly, higher total spending does not always dictate higher housing pressure. Take Western Australia as a prime example: Even though the 
+            scale of spending is significant, it maintains a relatively moderate housing burden of 29.5%. This suggests that certain 
+            regions possess a greater financial resilience, where higher income levels or different economic structures allow people to participate 
+            heavily in the economy without compromising their housing security.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>User Guide:</strong> This chart overlays circle size (total spending) and colour intensity (housing burden) on a geographic base. Larger 
+            circles reflect higher absolute spending.
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>NSW and Victoria combine the highest absolute spending with the heaviest housing burdens, creating a
+            "double pressure" effect for residents in Australia's most populous states.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== SECTION 5: LIFESTYLE & CHANGE ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 5: How Do Spending Priorities Change Over Time</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>A Seven-Year Journey of Household Spending</h3>
+          <p>
+            Everyone can sense that our lives have undergone tremendous changes over the past few years. This chart 
+            takes us back to review the fluctuations in various living expenses of ordinary families from <strong>2019 to the present</strong>. 
+            It is not just about the ups and downs of numbers, but also a reflection of the transformation of our lifestyles.
+          </p>
+          <p>
+            The chart reveals a clear post-COVID recovery: After the 2020 dip, spending across most categories has
+            rebounded strongly. By <strong>2026</strong>, <span style="color: #9b59b6; font-weight: bold;">Transport</span> and 
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> expenses had taken the lead. This might indicate 
+            that, after a long period of staying at home and restrictions, modern families are more inclined to spend their money on "getting out" and 
+            "rewarding themselves", rather than just staying at home. And even though the pressure of living costs, peoples' lifestyle still maintains
+             a momentum of continuous development.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>Interactive Guide:</strong> Use the "Select Category" below to focuse on specific categories.
+            Hover over data points to see exact spending amounts for each year. 
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis9" class="vis-container"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis10" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>Transport vs Recreation Shift</h3>
+          <p>
+            In our daily bills, <span style="color: #9b59b6; font-weight: bold;">Transport</span> and 
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> are the aspects that most directly 
+            reflect the cost of social operation and our pursuit of quality of life. In this chart, both <span style="color: #9b59b6; font-weight: bold;">Transport</span> and 
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> have grown steadily since 2020,
+            extending into <strong>2026</strong> with Transport at $14.6B and Recreation at $14.1B.
+          </p>
+          <p>
+            <span style="color: #9b59b6; font-weight: bold;">Transport</span> spending has shown the steepest growth, driven by fuel costs and renewed commuting.
+            <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> spending, while also growing, reflects a more gradual return to
+            pre-pandemic entertainment and cultural activities.
+          </p>
+          <p>
+            This gap between <span style="color: #9b59b6; font-weight: bold;">Transport</span> and <span style="color: #f39c12; font-weight: bold;">Recreation & Culture</span> spending suggests an important trend: rising commuting costs may be gradually reducing the amount 
+            households can spend on leisure and so on.
+          </p>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>By 2026, Transport spending ($14.6B) has grown faster than Recreation ($14.1B) since 2022,
+            suggesting that cost-of-living pressures (fuel, vehicle costs) are outpacing lifestyle recovery.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== SECTION 6: HOUSEHOLD TYPE ====== -->
+    <hr class="section-divider">
+    <div class="pure-g section-title">
+      <div class="pure-u-1-1">
+        <h2>Section 6: How Different Household Tell Different Spending Stories</h2>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div class="description description-left">
+          <h3>Different Life Stages, Different Financial Realities</h3>
+          <p>
+            Household spending patterns tell a broader story of how financial priorities evolve across life stages. 
+            While <span style="color: #1f4e79; font-weight: bold;">Housing</span> remains the dominant financial 
+            pressure across all groups, it is <strong>Families</strong> who feel this burden most strongly. This is because families
+            face significantly higher costs, driven by the need for larger living spaces and closer proximity to urban areas.
+          </p>
+          <p>
+            As life transitions into <strong>Retirement</strong>, a noticeable shift occurs. With work-related expenses such as <span style="color: #9b59b6; font-weight: bold;">Transport</span> no longer 
+            playing a central role, spending priorities begin to reorient toward <span style="color: #2980b9; font-weight: bold;">Health</span>. In this stage, healthcare becomes the primary 
+            focus of household expenditure, reflecting the growing importance of wellbeing over mobility.
+          </p>
+          <p>
+            In contrast, <strong>Singles</strong> occupy a more flexible financial position. With fewer domestic responsibilities, they are able to direct 
+            a greater share of their income toward recreation and lifestyle experiences. This highlights a subtle but important trade-off 
+            between financial obligations and personal freedom, shaping how different groups engage with consumption.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this chart:</strong> Each long column represents a household type. The different colored sections within the columns show spending by category.
+            Hover for exact weekly dollar amounts.
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>Retirees spend the highest proportion on Health ($350/week), while Families face the steepest Housing
+            costs ($850/week) — reflecting different life-stage priorities and pressures.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pure-u-1-2">
+        <div id="vis11" class="vis-container"></div>
+      </div>
+    </div>
+
+    <div class="pure-g">
+      <div class="pure-u-1-2">
+        <div id="vis12" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1-2">
+        <div class="description description-right">
+          <h3>The Spending Personalities of Australian Households</h3>
+          <p>
+            This chart shows the distinct spending patterns of different household groups in the six core expenditure categories. 
+            By observing each consumption item within a unified visual space. And the images show us how different life stages 
+            reshape the financial boundaries in our daily lives.
+          </p>
+          <p>
+            <span style="color: #228B22; font-weight: bold;">Families</span> display a pattern of broad financial expansion. Their profiles extend furthest across the three major pillars of 
+            spending — <span style="color: #1f4e79; font-weight: bold;">Housing</span>, <span style="color: #e67e22; font-weight: bold;">Food</span>, and <span style="color: #9b59b6; font-weight: bold;">Transport</span>
+             — reflecting not only the basic costs of survival, but also the heavy financial demands 
+            of supporting a larger household within urban environments. This outward-expanding contour reflects the rigidity of the family's phased 
+            financial structure - a large number of necessary responsibilities occupy the budget. This makes it almost impossible to have flexible adjustment space.
+          </p>
+          <p>
+            In contrast, <span style="color: #A0522D; font-weight: bold;">Retirees</span> display a noticeably “health-oriented” spending profile. As work-related expenses such as <span style="color: #9b59b6; font-weight: bold;">Transport</span> begin to decline, financial priorities shift dramatically toward healthcare. 
+            The profile stretches most strongly along the health dimension. This reflects how family expenditures have gradually shifted from "social mobility" to "maintenance of health and quality of life" during 
+            the process of aging.
+          </p>
+          <p>
+            At the same time, <span style="color: #6A040F; font-weight: bold;">Singles</span> present a far more balanced and compact spending profile. Lower overall living costs provide greater financial flexibility, allowing a larger 
+            share of income to flow toward recreation and lifestyle experiences. This more symmetrical shape reflects a level of adaptability and personal freedom that single households are still able to maintain despite rising living costs.
+          </p>
+          <div class="guide-box">
+            <span class="guide-icon">&#128161;</span>
+            <strong>How to read this radar chart:</strong> Each axis represents a spending category.
+            The further a polygon vertex is from the centre, the higher that household type's relative spending
+            in that category. Compare the three overlapping shapes to see lifestyle differences.
+            Hover over data points for exact normalised values.
+          </div>
+          <div class="insight-card">
+            <h4>Key Insight</h4>
+            <p>Retirees' Health spending is their strongest relative category (100% normalised), while Singles'
+            profile is the most evenly distributed — a signature of leaner, more flexible budgeting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== FOOTER ====== -->
+    <div class="pure-g footer">
+      <div class="pure-u-1-1">
+        <p>
+          Visualisation created by Yilin Wang for FIT2179 Data Visualisation Assignment 2.<br>
+          Data sourced from <a href="https://www.abs.gov.au/" target="_blank">Australian Bureau of Statistics</a>
+          and <a href="https://www.ceicdata.com/" target="_blank">CEIC Data</a>.<br>
+          Built with <a href="https://vega.github.io/vega-lite/" target="_blank">Vega-Lite</a> and
+          <a href="https://purecss.io/" target="_blank">Pure.css</a>.
+        </p>
+        <p style="font-size: 0.85em; margin-top: 8px;">
+          <strong>Colour Accessibility Note:</strong> This visualisation avoids simultaneous red-green colour pairings
+          to support colour-blind and vision-impaired users. Housing is consistently coded in deep blue (#1f4e79)
+          and each category maintains a fixed colour across all charts. Complex charts include detailed user guides.
+        </p>
+      </div>
+    </div>
+
+  </div> <!-- end page -->
+    
+  <!-- ====== VEGA-EMBED SCRIPTS ====== -->
+  <script type="text/javascript">
+    var specVis1 = "js/chart1_overview_bar.vg.json";
+    var specVis2 = "js/chart2_donut.vg.json";
+    var specVis3 = "js/chart3_stacked_housing.vg.json";
+    var specVis4 = "js/chart4_essentials.vg.json";
+    var specVis5 = null; // Rendered as D3.js Sankey below
+    var specVis6 = "js/chart6_housing_burden.vg.json";
+    var specVis7 = "js/chart7_choropleth_map.vg.json";
+    var specVis8 = "js/chart8_symbol_map.vg.json";
+    var specVis9 = "js/chart9_trend_line.vg.json";
+    var specVis10 = "js/chart10_area_transport.vg.json";
+    var specVis11 = "js/chart11_household_type.vg.json";
+    var specVis12 = "js/chart12_radar.vg.json";
+
+
+    function renderSankeyVis5(containerId) {    /* Sankey diagram rendered with D3.js for greater customization and interactivity than Vega-Lite allows. */
+      var width = 580, height = 520;
+      var margin = {top: 45, right: 95, bottom: 20, left: 90};
+      
+      d3.select(containerId).selectAll("*").remove();  /* Clear any existing content in the container before rendering the Sankey diagram. This makes sure that if the function is called multiple times, it won't create duplicate diagrams. */
+      var svg = d3.select(containerId)                 /* Create an SVG element within the specified container with defined width, height, and viewBox for responsive scaling. */
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", "0 0 " + width + " " + height); /* Set up the SVG canvas with appropriate dimensions and a viewBox for responsive design. */
+      
+      /* Title */
+      svg.append("text")
+        .attr("x", width / 2)                           /* Position the title at the horizontal center of the SVG. */
+        .attr("y", 22)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 14)
+        .attr("font-weight", 600)
+        .attr("fill", "#1a2a3a")
+        .text("Income Group → Spending Category → Necessity");
+      
+      /* Legend */
+      var legendData = [                               /* Define the legend data with category names and their corresponding colours. */
+        {name: "Housing", color: "#1f4e79"},
+        {name: "Food", color: "#e67e22"},
+        {name: "Transport", color: "#9b59b6"},
+        {name: "Other", color: "#34495e"}
+      ];
+      var legend = svg.append("g").attr("transform", "translate(" + (width/2 - 150) + ", 35)");   /* Create a group element for the legend and position it below the title, centered horizontally. */
+      legend.selectAll("circle")                       /* Add coloured circles to the legend for each category, spaced evenly. */
+        .data(legendData)
+        .join("circle")
+        .attr("cx", function(d, i) { return i * 80; }) /* Position circles horizontally with a spacing of 80 pixels. */
+        .attr("cy", 0)
+        .attr("r", 5)
+        .attr("fill", function(d) { return d.color; }); /* Set the fill colour of each circle according to the legend data. */
+      legend.selectAll("text")                          /* Add text labels next to each circle in the legend, aligned with the circles. */
+        .data(legendData)
+        .join("text")
+        .attr("x", function(d, i) { return i * 80 + 10; })
+        .attr("y", 0)
+        .attr("dy", "0.35em")                           /* Vertically align the text with the circles. */
+        .attr("font-size", 11)
+        .attr("fill", "#1a2a3a")
+        .text(function(d) { return d.name; });          /* Set the text of each label to the corresponding category name from the legend data. */
+      
+      var nodes = [                                     /* Define the nodes for the Sankey diagram, categorised into three columns: income groups, spending categories, and necessity types. */
+        {name: "Low Income", column: 0},
+        {name: "Mid Income", column: 0},
+        {name: "High Income", column: 0},
+        {name: "Housing", column: 1},
+        {name: "Food", column: 1},
+        {name: "Transport", column: 1},
+        {name: "Other", column: 1},
+        {name: "Essential", column: 2},
+        {name: "Non-Essential", column: 2}
+      ];
+      
+      var links = [                                     /* Define the links for the Sankey diagram, specifying the source and target nodes along with their flow values. */
+        {source: 0, target: 3, value: 38.2},
+        {source: 0, target: 4, value: 18.5},
+        {source: 0, target: 5, value: 12.3},
+        {source: 0, target: 6, value: 31.0},
+        {source: 1, target: 3, value: 28.5},
+        {source: 1, target: 4, value: 14.2},
+        {source: 1, target: 5, value: 15.8},
+        {source: 1, target: 6, value: 41.5},
+        {source: 2, target: 3, value: 18.3},
+        {source: 2, target: 4, value: 10.1},
+        {source: 2, target: 5, value: 16.5},
+        {source: 2, target: 6, value: 55.1},
+        {source: 3, target: 7, value: 85},
+        {source: 4, target: 7, value: 43},
+        {source: 5, target: 7, value: 45},
+        {source: 6, target: 8, value: 127}
+      ];
+      
+      var colorMap = {
+        "Housing": "#1f4e79",
+        "Food": "#e67e22",
+        "Transport": "#9b59b6",
+        "Other": "#34495e"
+      };
+      
+      var nodeColorMap = {
+        "Low Income": "#22333B",
+        "Mid Income": "#495E67",
+        "High Income": "#A9B8C2",
+        "Housing": "#1f4e79",
+        "Food": "#e67e22",
+        "Transport": "#9b59b6",
+        "Other": "#34495e",
+        "Essential": "#6A040F",
+        "Non-Essential": "#E0C3FC"
+      };
+      
+      var sankey = d3.sankey()                 /* Configure the Sankey layout with node width, padding, and extent to fit within the SVG canvas. */
+        .nodeWidth(25)
+        .nodePadding(20)
+        .nodeSort(null)
+        .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]]);   /* Define the area within the SVG where the Sankey diagram will be rendered, accounting for margins. */
+      
+      var graph = sankey({                     /* Create the graph structure for the Sankey diagram by passing in the nodes and links.  */
+        nodes: nodes.map(function(d) { return Object.assign({}, d); }),
+        links: links.map(function(d) { return Object.assign({}, d); })
+      });
+      
+      /* Tooltip (remove old one first to avoid duplicates) */
+      d3.select("body").selectAll(".sankey-tooltip").remove();
+      var tooltip = d3.select("body").append("div")  /* Create a tooltip div that will be used to display information when hovering over links. It is styled to be visually distinct and positioned absolutely on the page. */
+        .attr("class", "sankey-tooltip")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("background", "rgba(0,0,0,0.85)")    /* Set a semi-transparent black background for the tooltip to ensure readability against the page content. */
+        .style("color", "white")
+        .style("padding", "8px 12px")
+        .style("border-radius", "4px")
+        .style("font-size", "12px")
+        .style("pointer-events", "none")
+        .style("z-index", "1000");
+      
+      /* Draw links */
+      var link = svg.append("g")
+        .attr("fill", "none")
+        .selectAll("path")
+        .data(graph.links)
+        .join("path")
+        .attr("d", d3.sankeyLinkHorizontal())
+        .attr("stroke", function(d) { return colorMap[d.source.name] || "#34495e"; })    /* Set the stroke colour of each link based on the source node's category, using the defined colour map. If the source category is not found in the map, default to a grey colour. */
+        .attr("stroke-opacity", 0.55)
+        .attr("stroke-width", function(d) { return Math.max(1, d.width); })              /* Set the stroke width of each link based on the flow value, ensuring a minimum width for visibility. */
+        .style("cursor", "pointer")
+        .on("mouseover", function(event, d) {                                            /* Add interactivity to the links: when a user hovers over a link, increase its opacity for emphasis and display a tooltip showing the source and target node names along with the flow value. The flow value is formatted to one decimal place for clarity. */
+          d3.select(this).attr("stroke-opacity", 0.8);
+          tooltip.style("visibility", "visible")
+            .html("<strong>" + d.source.name + " → " + d.target.name + "</strong><br>Flow Value: " + d.value.toFixed(1));   /* When hovering over a link, increase its opacity for emphasis and display a tooltip showing the source and target node names along with the flow value, formatted to one decimal place. */
+        })
+        .on("mousemove", function(event) {                                               /* Update the position of the tooltip to follow the mouse cursor, with a slight offset to prevent it from obscuring the link being hovered over. The tooltip is positioned 10 pixels above and 10 pixels to the right of the cursor. */
+          tooltip.style("top", (event.pageY - 10) + "px")
+            .style("left", (event.pageX + 10) + "px");
+        })
+        .on("mouseout", function() {                                                     /* When the mouse leaves a link, reset its opacity to the default value and hide the tooltip. This ensures that the visual emphasis is removed and the tooltip does not linger on the screen. */
+          d3.select(this).attr("stroke-opacity", 0.55);
+          tooltip.style("visibility", "hidden");
+        });
+      
+      /* Draw nodes */
+      var node = svg.append("g")
+        .selectAll("rect")
+        .data(graph.nodes)
+        .join("rect")
+        .attr("x", function(d) { return d.x0; })
+        .attr("y", function(d) { return d.y0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .attr("height", function(d) { return Math.max(1, d.y1 - d.y0); })  
+        .attr("fill", function(d) { return nodeColorMap[d.name]; })
+        .attr("stroke", "#1a2a3a")
+        .attr("stroke-width", 3)
+        .style("cursor", "default");
+      
+      /* Draw labels */
+      svg.append("g")
+        .selectAll("text")
+        .data(graph.nodes)
+        .join("text")
+        .attr("x", function(d) {
+          if (d.depth === 0) return d.x0 - 8;
+          if (d.depth === 1) return (d.x0 + d.x1) / 2;
+          return d.x1 + 8;
+        })
+        .attr("y", function(d) { return (d.y0 + d.y1) / 2; })
+        .attr("text-anchor", function(d) {
+          if (d.depth === 0) return "end";
+          if (d.depth === 1) return "middle";
+          return "start";
+        })
+        .attr("fill", function(d) {
+          if (d.depth === 1) return "#ffffff";
+          return "#1a2a3a";
+        })
+        .attr("font-size", 12)
+        .attr("font-weight", 700)
+        .each(function(d) {
+          var el = d3.select(this);             /* For nodes in the middle column (spending categories), we set the font size to 11 and split the text into two lines if the category is "Non-Essential". This is done to improve readability and ensure that longer category names fit within the node. For "Non-Essential", we split it into "Non-" and "Essential" on two lines. For all other nodes, we simply display the name as is. */
+          if (d.depth === 2) el.attr("font-size", 11);
+          el.text(null);
+          var lines;
+          if (d.name === "Non-Essential") {    /* Specifically for the "Non-Essential" node, we split the text into two lines: "Non-" on the first line and "Essential" on the second line. This is done to improve readability and ensure that the full category name fits within the node without overflowing. For all other nodes, we keep the name as a single line. */
+            lines = ["Non-", "Essential"];
+          } else {
+            lines = [d.name];
+          }
+          lines.forEach(function(line, i) {
+            el.append("tspan")
+              .attr("x", el.attr("x"))
+              .attr("dy", function() {
+                if (i === 0) {
+                    if (lines.length === 1) {
+                        return "0.35em";
+                }
+                return "-0.55em";
+           }
+           return "1.1em";})   /* Position the tspan elements to create line breaks. For a single line, we vertically align it with "0.35em". For the first line of a multi-line label, we shift it up with "-0.55em", and for subsequent lines, we use "1.1em" to space them evenly below the previous line. */
+              .text(line);
+          });
+        });
+      
+      /* Add separators between left nodes */
+      var leftNodes = graph.nodes.filter(function(d) { return d.depth === 0; });
+      for (var i = 0; i < leftNodes.length - 1; i++) {     /* To enhance readability, we add horizontal separator lines between the nodes in the leftmost column (income groups). This visually distinguishes the different income groups and makes it easier for viewers to follow the flow from each group to the spending categories. We loop through the left nodes and draw a line between each pair of adjacent nodes. The line is positioned at the vertical midpoint between the two nodes and spans the width of the node. */
+        var n1 = leftNodes[i];
+        var n2 = leftNodes[i + 1];
+        var sepY = (n1.y1 + n2.y0) / 2;
+        svg.append("line")
+          .attr("x1", n1.x0)
+          .attr("x2", n1.x1)
+          .attr("y1", sepY)
+          .attr("y2", sepY)
+          .attr("stroke", "#ffffff")
+          .attr("stroke-width", 4);
+      }
+    }
+
+
+    vegaEmbed('#vis1', specVis1, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis2', specVis2, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis3', specVis3, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis4', specVis4, { "renderer":"svg", "actions": false }).catch(console.error);
+    renderSankeyVis5('#vis5');
+    vegaEmbed('#vis6', specVis6, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis7', specVis7, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis8', specVis8, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis9', specVis9, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis10', specVis10, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis11', specVis11, { "renderer":"svg", "actions": false }).catch(console.error);
+    vegaEmbed('#vis12', specVis12, { "renderer":"svg", "actions": false }).catch(console.error);
+    </script>
+</body>
+</html>

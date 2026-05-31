@@ -1,0 +1,46 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Housing Burden by Income Group",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "data": {"values": [{"income_group":"Low Income","housing_pct":38.2,"other_essentials_pct":41.8,"discretionary_pct":20},{"income_group":"Middle Income","housing_pct":28.5,"other_essentials_pct":38.7,"discretionary_pct":32.8},{"income_group":"High Income","housing_pct":18.3,"other_essentials_pct":32.4,"discretionary_pct":49.3}]},
+  "mark": {"type": "bar", "tooltip": {"content": "data"}, "cornerRadiusEnd": 4},
+  "encoding": {
+    "x": {
+      "field": "income_group",
+      "type": "nominal",
+      "title": null,
+      "axis": {"labelFontSize": 12, "labelAngle": 0}
+    },
+    "y": {
+      "field": "housing_pct",
+      "type": "quantitative",
+      "title": "Housing as % of Total Spending",
+      "axis": {"tickCount": 6, "grid": true, "gridColor": "#e2e8f0", "gridOpacity": 0.3}
+    },
+    "color": {
+      "field": "income_group",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Low Income", "Middle Income", "High Income"],
+        "range": ["#22333B", "#495E67", "#A9B8C2"]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "income_group", "type": "nominal", "title": "Income Group"},
+      {"field": "housing_pct", "type": "quantitative", "title": "Housing Burden (%)", "format": ".1f"},
+      {"field": "other_essentials_pct", "type": "quantitative", "title": "Other Essentials (%)", "format": ".1f"},
+      {"field": "discretionary_pct", "type": "quantitative", "title": "Discretionary (%)", "format": ".1f"}
+    ]
+  }
+}
+

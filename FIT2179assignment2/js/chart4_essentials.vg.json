@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Essential vs Non-Essential Spending",
+    "fontSize": 14,
+    "fontWeight": 600,
+    "color": "#1a2a3a"
+  },
+  "width": "container",
+  "height": 400,
+  "config": {
+    "view": {"stroke": "transparent"}
+  },
+  "data": {"values": [{"type":"Essential","category":"Food & Housing & Transport","amount":52068},{"type":"Essential","category":"Health & Utilities","amount":9396},{"type":"Non-Essential","category":"Recreation & Culture","amount":13436},{"type":"Non-Essential","category":"Hotels & Restaurants","amount":10834},{"type":"Non-Essential","category":"Other Goods & Services","amount":19684}]},
+  "params": [
+    {
+      "name": "typeHighlight",
+      "select": {
+        "type": "point", 
+        "on": "mouseover", 
+        "fields": ["type"] 
+      }}
+  ],
+  "mark": {"type": "bar", "tooltip": {"content": "data"}, "cornerRadiusEnd": 4},
+  "encoding": {
+    "x": {
+      "field": "category",
+      "type": "nominal",
+      "title": null,
+      "axis": {"labelAngle": -25, "labelFontSize": 10}
+    },
+    "y": {
+      "field": "amount",
+      "type": "quantitative",
+      "title": "Amount (AUD Millions)",
+      "axis": {"tickCount": 5, "grid": true, "gridColor": "#e2e8f0", "gridOpacity": 0.3}
+    },
+    "color": {
+      "field": "type",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Essential", "Non-Essential"],
+        "range": ["#6A040F", "#E0C3FC"]
+      },
+      "legend": {
+        "orient": "top",
+        "title": null,
+        "labelFontSize": 12
+      }
+    },
+    "opacity": {
+      "condition": {"param": "typeHighlight", "value": 1},
+      "value": 0.2
+    },
+    "strokeOpacity": {
+      "condition": {"param": "typeHighlight", "value": 1},
+      "value": 0
+    },
+    "tooltip": [
+      {"field": "category", "type": "nominal", "title": "Category"},
+      {"field": "type", "type": "nominal", "title": "Type"},
+      {"field": "amount", "type": "quantitative", "title": "Amount (AUD Mn)", "format": ",.0f"}
+    ]
+  }
+}
+
