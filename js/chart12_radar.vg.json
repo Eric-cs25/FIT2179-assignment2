@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Household Spending Profile Comparison (Radar Chart)",
+    "text": "Household Spending Profile Comparison",
     "fontSize": 14,
     "fontWeight": 600,
     "color": "#1a2a3a"
@@ -81,7 +81,7 @@
           "type": "nominal",
           "scale": {
             "domain": ["Families", "Singles", "Retirees"],
-            "range": ["#1f4e79", "#e67e22", "#9b59b6"]
+            "range": ["#228B22", "#0000FF", "#A0522D"]
           },
           "legend": {"orient": "top", "title": null, "labelFontSize": 12}
         },

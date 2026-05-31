@@ -12,7 +12,13 @@
     "view": {"stroke": "transparent"}
   },
   "data": {"values": [{"household_type":"Families","category":"Housing","amount":850},{"household_type":"Families","category":"Food","amount":420},{"household_type":"Families","category":"Transport","amount":520},{"household_type":"Families","category":"Recreation","amount":380},{"household_type":"Families","category":"Health","amount":290},{"household_type":"Singles","category":"Housing","amount":480},{"household_type":"Singles","category":"Food","amount":210},{"household_type":"Singles","category":"Transport","amount":280},{"household_type":"Singles","category":"Recreation","amount":240},{"household_type":"Singles","category":"Health","amount":150},{"household_type":"Retirees","category":"Housing","amount":520},{"household_type":"Retirees","category":"Food","amount":280},{"household_type":"Retirees","category":"Transport","amount":180},{"household_type":"Retirees","category":"Recreation","amount":320},{"household_type":"Retirees","category":"Health","amount":350}]},
-  "mark": {"type": "bar", "tooltip": {"content": "data"}, "cornerRadiusEnd": 4},
+  "params": [
+    {
+      "name": "categoryHighlight",
+      "select": {"type": "point", "on": "mouseover", "fields": ["category"]}
+    }
+  ],
+  "mark": {"type": "bar", "tooltip": {"content": "data"}, "stroke": "white", "cornerRadiusEnd": 4},
   "encoding": {
     "x": {
       "field": "household_type",
@@ -38,6 +44,14 @@
         "title": null,
         "labelFontSize": 10
       }
+    },
+    "opacity": {
+      "condition": {"param": "categoryHighlight", "value": 1},
+      "value": 0.2
+    },
+    "strokeWidth": {
+      "condition": {"param": "categoryHighlight", "value": 2},
+      "value": 0
     },
     "tooltip": [
       {"field": "household_type", "type": "nominal", "title": "Household Type"},

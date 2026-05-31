@@ -46,7 +46,9 @@
         "orient": "right",
         "title": null,
         "labelFontSize": 11,
-        "symbolSize": 80
+        "symbolSize": 80,
+        "rowPadding": 8,
+        "labelExpr": "datum.label == 'Furnishings & Household Equipment' ? ['Furnishings &', 'Household Equipment'] : datum.label == 'Miscellaneous Goods & Services' ? ['Miscellaneous Goods &', 'Services'] : datum.label == 'Alcoholic Beverages & Tobacco' ? ['Alcoholic Beverages &', 'Tobacco'] : datum.label"
       }
     },
     "tooltip": [
@@ -56,7 +58,9 @@
     ]
   },
   "transform": [
-    {"window": [{"op": "sum", "field": "amount", "as": "total"}]},
+    {"window": [{"op": "sum", "field": "amount", "as": "total"}],
+     "frame": [null,null]
+    },
     {"calculate": "datum.amount / datum.total", "as": "percentage"}
   ]
 }

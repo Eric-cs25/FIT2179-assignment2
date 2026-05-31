@@ -24,6 +24,12 @@
   {"category":"Clothing & Footwear","amount":4497.7,"color_order":8},
   {"category":"Alcoholic Beverages & Tobacco","amount":2794.1,"color_order":9}
 ]},
+  "params": [
+    {
+      "name": "highlight",
+      "select": {"type": "point", "on": "mouseover", "clear": "mouseout", "nearest": true}
+    }
+  ],
   "transform": [
     {"calculate": "datum.amount / 1000", "as": "amount_billions"}
   ],
@@ -69,6 +75,10 @@
         ]
       },
       "legend": null
+    },
+    "opacity": {
+      "condition": {"param": "highlight", "empty": true, "value": 1},
+      "value": 0.4
     },
     "tooltip": [
       {"field": "category", "type": "nominal", "title": "Category"},

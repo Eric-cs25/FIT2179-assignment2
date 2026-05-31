@@ -31,7 +31,7 @@
       "type": "nominal",
       "scale": {
         "domain": ["Low Income", "Middle Income", "High Income"],
-        "range": ["#e67e22", "#f39c12", "#2980b9"]
+        "range": ["#22333B", "#495E67", "#A9B8C2"]
       },
       "legend": null
     },
